@@ -28,4 +28,6 @@
 package AUS::Client::VMwareVI;
 
 use VMware::VIRuntime;
+use AUS::Client::Generic;
 use strict;
+our @ISA = qw(AUS::Client::Generic);

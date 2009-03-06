@@ -27,6 +27,7 @@
 #
 
 use XML::LibXML;
+use AUS::Client::Generic;
 use strict;
 
 my $xml_cfgfile = shift || die "Usage: $0 <config.xml>\n";
@@ -34,7 +35,7 @@ die "Could not read config file!\n" unless (-r $xml_cfgfile);
 
 my $xml_parser = XML::LibXML->new();
 my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
-
+&parse_config($xml_dom, '/aus/shutdowns');
 
 sub parse_config() {
     my ($ctx, $xpath) = @_;

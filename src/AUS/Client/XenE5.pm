@@ -29,4 +29,6 @@ package AUS::Client::XenE5;
 
 use RPC::XML;
 use RPC::XML::Client;
+use AUS::Client::Generic;
 use strict;
+our @ISA = qw(AUS::Client::Generic);

@@ -25,8 +25,49 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-package AUS::Client::SSH;
+package AUS::Client::Generic;
 
-use AUS::Client::Generic;
+use XML::LibXML;
 use strict;
-our @ISA = qw(AUS::Client::Generic);
+
+sub new {
+    my ($class, $ctx) = @_;
+    my $action = $ctx->nodeName;
+
+    my $self = {
+	_class => $class,
+    };
+
+    # Read default config
+    my $res = $ctx->findnodes('/aus/templates/'.$action."[\@name = '$class']/*");
+    if ($res->isa('XML::LibXML::NodeList')) {
+	foreach my $n ($res->get_nodelist) {
+	    ${$self}{$n->nodeName} = $n->textContent;
+        }
+    }
+
+    # Read config
+    $res = $ctx->findnodes("*");
+    if ($res->isa('XML::LibXML::NodeList')) {
+	foreach my $n ($res->get_nodelist) {
+	    ${$self}{$n->nodeName} = $n->textContent;
+        }
+    }
+
+    bless $self, $class;
+    return $self;
+}
+
+sub do_shutdown {
+    my ($self) = @_;
+
+    warn(${$self}{_class} . " did not override do_shutdown method!\n");
+}
+
+sub check_shutdown {
+    my ($self) = @_;
+
+    warn(${$self}{_class} . " did not override check_shutdown method!\n");
+}
+
+1;

@@ -27,4 +27,6 @@
 
 package AUS::Client::EXEC;
 
+use AUS::Client::Generic;
 use strict;
+our @ISA = qw(AUS::Client::Generic);
