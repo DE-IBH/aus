@@ -1,4 +1,3 @@
-#!/usr/bin/perl -w
 
 # aus - Agentless Universal Shutdown
 #
@@ -26,23 +25,6 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-use XML::LibXML;
+package AUS::Client::EXEC;
+
 use strict;
-
-my $xml_cfgfile = shift || die "Usage: $0 <config.xml>\n";
-die "Could not read config file!\n" unless (-r $xml_cfgfile);
-
-my $xml_parser = XML::LibXML->new();
-my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
-
-
-sub parse_config() {
-    my ($ctx, $xpath) = @_;
-
-    my $res = $ctx->findnodes($xpath);
-    die "Empty XPath node list: $xpath" unless ($res->isa('XML::LibXML::NodeList'));
-
-    foreach my $nctx ($res->get_nodelist) {
-	print $nctx->toString(1),"\n";
-    }
-}
