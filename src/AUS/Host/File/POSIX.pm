@@ -1,4 +1,3 @@
-#!/usr/bin/perl -w
 
 # aus - Agentless Universal Shutdown
 #
@@ -26,14 +25,40 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-use AUS::Config;
-use Event;
+package AUS::Host::File:POSIX;
 
-if ($^O eq "MSWin32") {
-  require AUS::Win32;
-}
-else  {
-  require AUS::POSIX;
+use AUS::Host::Generic;
+use strict;
+our @ISA = qw(AUS::Host::File);
+
+sub new {
+    my ($class, @p) = @_;
+    my $self = AUS::Host::File->new($class, @p);
+
+    $self{'inotify'} = Linux::Inotify2->new()
+	or die "Unable to create new inotify object: $!";
+    Event->io(
+		fd =>$self{'inotify'}->fileno,
+		poll => 'r',
+		cb => sub { $self{'inotify'}->poll }
+    );
+
+    $inotify->watch ($self{'filename'}, IN_CLOSE_WRITE, sub {
+	my $e = shift;
+	my $name = $e->fullname;
+	
+	if($e->IN_CLOSE_WRITE) {
+	    print "$name was written\n";
+	}
+    });
+
+    return $self;
 }
 
-Event::loop();
+sub getHosts {
+    my ($self) = @_;
+
+    warn(${$self}{_class} . " did not override getXMLhosts method!\n");
+}
+
+1;

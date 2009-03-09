@@ -1,4 +1,3 @@
-#!/usr/bin/perl -w
 
 # aus - Agentless Universal Shutdown
 #
@@ -26,14 +25,27 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-use AUS::Config;
-use Event;
+package AUS::Host::File;
+
+use AUS::Host::Generic;
+use strict;
+our @ISA = qw(AUS::Host::Generic);
 
 if ($^O eq "MSWin32") {
-  require AUS::Win32;
+  require AUS::Host::File::Win32;
 }
 else  {
-  require AUS::POSIX;
+  require AUS::Host::File::POSIX;
 }
 
-Event::loop();
+sub new {
+    my ($class, @p) = @_;
+    my $self = AUS::Host::Generic->new($class, @p);
+
+    die("$class requires filename option!\n") unless ($self{'filename'});
+    die('Could not read file '.$self{'filename'}."!\n") unless (-r $self{'filename'});
+
+    return $self;
+}
+
+1;

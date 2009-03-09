@@ -1,5 +1,3 @@
-#!/usr/bin/perl -w
-
 # aus - Agentless Universal Shutdown
 #
 # $Id$
@@ -26,14 +24,15 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-use AUS::Config;
-use Event;
+package AUS::POSIX;
 
-if ($^O eq "MSWin32") {
-  require AUS::Win32;
-}
-else  {
-  require AUS::POSIX;
-}
+use Proc::Daemon;
+use Sys::Syslog;
+our @ISA = qw(main);
 
-Event::loop();
+Proc::Daemon::Init;
+
+openlog("ausd[$$]", 0, LOG_DAEMON);
+syslog(LOG_INFO, "starting...");
+
+1;

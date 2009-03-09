@@ -1,4 +1,3 @@
-#!/usr/bin/perl -w
 
 # aus - Agentless Universal Shutdown
 #
@@ -26,14 +25,34 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-use AUS::Config;
-use Event;
+package AUS::Host::Generic;
 
-if ($^O eq "MSWin32") {
-  require AUS::Win32;
-}
-else  {
-  require AUS::POSIX;
+use XML::LibXML;
+use strict;
+
+sub new {
+    my ($class, $ctx) = @_;
+
+    my $self = {
+	_class => $class,
+    };
+
+    # Read parameter
+    $res = $ctx->findnodes("*");
+    if ($res->isa('XML::LibXML::NodeList')) {
+	foreach my $n ($res->get_nodelist) {
+	    ${$self}{$n->nodeName} = $n->textContent;
+        }
+    }
+
+    bless $self, $class;
+    return $self;
 }
 
-Event::loop();
+sub getXMLhosts {
+    my ($self) = @_;
+
+    warn(${$self}{_class} . " did not override getXMLhosts method!\n");
+}
+
+1;
