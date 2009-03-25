@@ -1,3 +1,21 @@
 Agentless Universal Shutdown
 ============================
 
+Installation GNU/Linux
+----------------------
+
+Required packages:
+ - Event
+ - Proc::Daemon
+ - Sys::Syslog
+ - XML::LibXML
+ - Linux::Inotify2
+ 
+Optional:
+ - VMware::VIRuntime (VMware 3.5)
+ - RPC::XML          (Xen 5.0)
+ - RPC::XML::Client  (Xen 5.0)
+
+
+Installation MS Win
+-------------------
