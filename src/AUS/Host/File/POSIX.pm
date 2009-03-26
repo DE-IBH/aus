@@ -25,9 +25,10 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-package AUS::Host::File:POSIX;
+package AUS::Host::File::POSIX;
 
 use AUS::Host::Generic;
+use Linux::Inotify2;
 use strict;
 our @ISA = qw(AUS::Host::File);
 
@@ -35,21 +36,21 @@ sub new {
     my ($class, @p) = @_;
     my $self = AUS::Host::File->new($class, @p);
 
-    $self{'inotify'} = Linux::Inotify2->new()
+    ${$self}{'inotify'} = Linux::Inotify2->new()
 	or die "Unable to create new inotify object: $!";
     Event->io(
-		fd =>$self{'inotify'}->fileno,
+		fd =>${$self}{'inotify'}->fileno,
 		poll => 'r',
-		cb => sub { $self{'inotify'}->poll }
+		cb => sub { ${$self}{'inotify'}->poll }
     );
 
-    $inotify->watch ($self{'filename'}, IN_CLOSE_WRITE, sub {
-	my $e = shift;
-	my $name = $e->fullname;
+    ${$self}{'inotify'}->watch (${$self}{'filename'}, Linux::Inotify2::Consts::IN_CLOSE_WRITE, sub {
+		my $e = shift;
+		my $name = $e->fullname;
 	
-	if($e->IN_CLOSE_WRITE) {
-	    print "$name was written\n";
-	}
+		if($e->IN_CLOSE_WRITE) {
+		    print "$name was written\n";
+		}
     });
 
     return $self;

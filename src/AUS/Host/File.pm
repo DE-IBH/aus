@@ -42,8 +42,8 @@ sub new {
     my ($class, @p) = @_;
     my $self = AUS::Host::Generic->new($class, @p);
 
-    die("$class requires filename option!\n") unless ($self{'filename'});
-    die('Could not read file '.$self{'filename'}."!\n") unless (-r $self{'filename'});
+    die("$class requires filename option!\n") unless (${$self}{'filename'});
+    die('Could not read file '.${$self}{'filename'}."!\n") unless (-r ${$self}{'filename'});
 
     return $self;
 }

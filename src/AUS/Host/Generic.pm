@@ -38,7 +38,7 @@ sub new {
     };
 
     # Read parameter
-    $res = $ctx->findnodes("*");
+    my $res = $ctx->findnodes("*");
     if ($res->isa('XML::LibXML::NodeList')) {
 	foreach my $n ($res->get_nodelist) {
 	    ${$self}{$n->nodeName} = $n->textContent;
