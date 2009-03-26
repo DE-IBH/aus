@@ -29,6 +29,21 @@
 use AUS::Config;
 use Event;
 
+my $logger;
+my $mypid = $$;
+
+END {
+	if($mypid == $$) {
+		my $m = "terminated (rc=$?)";
+		if(defined $Main::logger) {
+			$Main::logger->info($m);
+		}
+		else {
+			print STDERR "$m\n";
+		}
+	}
+}
+
 if ($^O eq "MSWin32") {
   require AUS::Win32;
 }

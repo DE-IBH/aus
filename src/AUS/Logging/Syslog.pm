@@ -24,15 +24,40 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-package AUS::POSIX;
-
-use AUS::Logging::Syslog;
-use Proc::Daemon;
+use AUS::Logging;
+package AUS::Logging::Syslog;
 use strict;
-our @ISA = qw(main);
+use Sys::Syslog;
+our @ISA = qw(AUS::Logging);
 
-$Main::logger = AUS::Logging::Syslog->new();
+sub new {
+    my ($class) = @_;
+    my $self = AUS::Logging->new($class);
 
-Proc::Daemon::Init;
+    bless $self, $class;
+
+	openlog('ausd', 'pid', Sys::Syslog::LOG_DAEMON);
+	$self->info('starting...');
+
+    return $self;
+}
+
+sub info {
+    my ($self, $m) = @_;
+	
+	syslog(Sys::Syslog::LOG_INFO, $m)
+}
+
+sub warning {
+    my ($self, $m) = @_;
+	
+	syslog(Sys::Syslog::LOG_WARNING, $m)
+}
+
+sub error {
+    my ($self, $m) = @_;
+	
+	syslog(Sys::Syslog::LOG_ERR, $m)
+}
 
 1;

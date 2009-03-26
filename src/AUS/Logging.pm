@@ -24,15 +24,17 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-package AUS::POSIX;
+package AUS::Logging;
 
-use AUS::Logging::Syslog;
-use Proc::Daemon;
 use strict;
-our @ISA = qw(main);
 
-$Main::logger = AUS::Logging::Syslog->new();
+sub new {
+    my ($class) = @_;
 
-Proc::Daemon::Init;
+    my $self = { };
+
+    bless $self, $class;
+    return $self;
+}
 
 1;
