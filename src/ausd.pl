@@ -28,15 +28,15 @@
 
 use AUS::Config;
 use Event;
+use strict;
 
-my $logger;
 my $mypid = $$;
 
 END {
 	if($mypid == $$) {
 		my $m = "terminated (rc=$?)";
-		if(defined $Main::logger) {
-			$Main::logger->info($m);
+		if(defined $main::logger) {
+			$main::logger->info($m);
 		}
 		else {
 			print STDERR "$m\n";
@@ -51,4 +51,10 @@ else  {
   require AUS::POSIX;
 }
 
+sub cmd_handler() {
+	my $io = shift;
+	print STDERR "cmd_handler: ".readline($io->w->fd);
+}
+
+$main::logger->info("enter event loop");
 Event::loop();

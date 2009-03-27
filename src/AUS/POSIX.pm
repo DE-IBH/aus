@@ -28,11 +28,39 @@ package AUS::POSIX;
 
 use AUS::Logging::Syslog;
 use Proc::Daemon;
+use POSIX qw(mkfifo);
 use strict;
 our @ISA = qw(main);
 
-$Main::logger = AUS::Logging::Syslog->new();
+$main::logger = AUS::Logging::Syslog->new();
+$main::logger->info("starting...");
 
-Proc::Daemon::Init;
+#Proc::Daemon::Init;
+
+my $FIFO_NAME = "/tmp/ausd";
+unless(-e $FIFO_NAME) {
+	unless(mkfifo($FIFO_NAME, 0700)) {
+		$main::logger->warning("mkfifo($FIFO_NAME) failed: $!");
+	}
+}
+if(-r $FIFO_NAME) {
+	my $fifo;
+	if(open($fifo, $FIFO_NAME)) {
+		Event->io(
+			desc => 'FIFO handler',
+			fd => $fifo,
+			poll => 'r',
+			cb => \&main::cmd_handler,
+			repeat => '1',
+		);
+
+		$main::logger->info("listening on $FIFO_NAME");
+	}
+	else {
+		$main::logger->warning("open($FIFO_NAME) failed: $!");
+	}
+} else {
+	$main::logger->warning("$FIFO_NAME not readable - ignoring");
+}
 
 1;

@@ -37,7 +37,6 @@ sub new {
     bless $self, $class;
 
 	openlog('ausd', 'pid', Sys::Syslog::LOG_DAEMON);
-	$self->info('starting...');
 
     return $self;
 }
