@@ -1,4 +1,3 @@
-#!/usr/bin/perl -w
 
 # aus - Agentless Universal Shutdown
 #
@@ -26,35 +25,9 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
-use AUS::Config;
-use Event;
+package AUS::Client::iLO;
+
+use AUS::Client::Generic;
+use WWW::Curl::Easy;
 use strict;
-
-my $mypid = $$;
-
-END {
-	if($mypid == $$) {
-		my $m = "terminated (rc=$?)";
-		if(defined $main::logger) {
-			$main::logger->info($m);
-		}
-		else {
-			print STDERR "$m\n";
-		}
-	}
-}
-
-if ($^O eq "MSWin32") {
-  require AUS::Win32;
-}
-else  {
-  require AUS::POSIX;
-}
-
-sub cmd_handler() {
-	my $ev = shift;
-	print STDERR "cmd_handler: ".${$ev->w->fd}->getline;
-}
-
-$main::logger->info("enter event loop");
-Event::loop();
+our @ISA = qw(AUS::Client::Generic);
