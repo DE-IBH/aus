@@ -31,7 +31,7 @@ use XML::LibXML;
 use strict;
 
 sub new {
-    my ($class, $ctx) = @_;
+    my ($class, $oclass, $ctx) = @_;
 
     my $self = {
 	_class => $class,
@@ -40,8 +40,8 @@ sub new {
     # Read parameter
     my $res = $ctx->findnodes("*");
     if ($res->isa('XML::LibXML::NodeList')) {
-	foreach my $n ($res->get_nodelist) {
-	    ${$self}{$n->nodeName} = $n->textContent;
+		foreach my $n ($res->get_nodelist) {
+	    	${$self}{$n->nodeName} = $n->textContent;
         }
     }
 

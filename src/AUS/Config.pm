@@ -26,26 +26,33 @@
 
 package AUS::Config;
 
-#use XML::LibXML;
-#use AUS::Client::Generic;
-#use strict;
+use XML::LibXML;
+use AUS::Client::Generic;
+use AUS::Host::Generic;
+use strict;
 
-#my $xml_cfgfile = shift || die "Usage: $0 <config.xml>\n";
-#die "Could not read config file!\n" unless (-r $xml_cfgfile);
+my $xml_cfgfile = shift || die "Usage: $0 <config.xml>\n";
+die "Could not read config file!\n" unless (-r $xml_cfgfile);
 
-#my $xml_parser = XML::LibXML->new();
-#my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
-#&parse_config($xml_dom, '/aus/shutdowns');
-#
-#sub parse_config() {
-#    my ($ctx, $xpath) = @_;
-#
-#    my $res = $ctx->findnodes($xpath);
-#    die "Empty XPath node list: $xpath" unless ($res->isa('XML::LibXML::NodeList'));
-#
-#    foreach my $nctx ($res->get_nodelist) {
-#	print $nctx->toString(1),"\n";
-#   }
-#}
+my $xml_parser = XML::LibXML->new();
+my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
+&parse_hosts($xml_dom, '/aus/hosts/use');
+
+sub parse_hosts() {
+	my ($ctx, $xpath) = @_;
+
+	my $res = $ctx->findnodes($xpath);
+	die "config file: empty XPath node list: $xpath\n" unless ($res->isa('XML::LibXML::NodeList'));
+
+	foreach my $nctx ($res->get_nodelist) {
+		my $pkg = $nctx->findvalue("\@name");
+		
+		eval("require $pkg;");
+		die($@) if $@;
+
+		eval("push(\@main::nodes, new $pkg(\$nctx));");
+		die($@) if $@;
+	}
+}
 
 1;

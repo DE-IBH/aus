@@ -44,7 +44,7 @@ sub new {
 		cb => sub { ${$self}{'inotify'}->poll }
     );
 
-    ${$self}{'inotify'}->watch (${$self}{'filename'}, Linux::Inotify2::Consts::IN_CLOSE_WRITE, sub {
+    ${$self}{'inotify'}->watch (${$self}{'filename'}, IN_CLOSE_WRITE, sub {
 		my $e = shift;
 		my $name = $e->fullname;
 	

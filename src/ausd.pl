@@ -31,6 +31,7 @@ use Event;
 use strict;
 
 my $mypid = $$;
+my @nodes = qw();
 
 sub WARN_handler {
     my($signal) = @_;
