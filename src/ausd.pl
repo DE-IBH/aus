@@ -53,8 +53,20 @@ else  {
 
 sub cmd_handler() {
 	my $ev = shift;
-	print STDERR "cmd_handler: ".${$ev->w->fd}->getline;
+	if(my $cmd = $ev->w->fd->getline) {
+		if($cmd =~ /^shutdown (.+)$/) {
+			$main::logger->warning("shutdown request by '" . $ev->w->desc . "'");
+		}
+		elsif($cmd =~ /^test (.+)$/) {
+			$main::logger->info("test request by '" . $ev->w->desc . "'");
+		}
+		else {
+			$main::logger->warning("unknown request '$cmd' by '" . $ev->w->desc . "'");
+		}
+	}
+	
 }
 
 $main::logger->info("enter event loop");
+
 Event::loop();

@@ -28,6 +28,7 @@ package AUS::POSIX;
 
 use AUS::Logging::Syslog;
 use Proc::Daemon;
+use IO::File;
 use POSIX qw(mkfifo);
 use strict;
 our @ISA = qw(main);
@@ -45,7 +46,8 @@ unless(-e $FIFO_NAME) {
 }
 if(-r $FIFO_NAME) {
 	my $fifo;
-	if(open($fifo, $FIFO_NAME)) {
+	if($fifo = new IO::File($FIFO_NAME, O_RDWR)) {
+		$fifo->blocking(0);
 		Event->io(
 			desc => 'FIFO handler',
 			fd => $fifo,
