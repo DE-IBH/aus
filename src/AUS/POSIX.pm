@@ -39,8 +39,9 @@ $main::logger->info("starting...");
 #Proc::Daemon::Init;
 
 my $FIFO_NAME = "/tmp/ausd";
+my $FIFO_PERM = 0700;
 unless(-e $FIFO_NAME) {
-	unless(mkfifo($FIFO_NAME, 0700)) {
+	unless(mkfifo($FIFO_NAME, $FIFO_PERM)) {
 		$main::logger->warning("mkfifo($FIFO_NAME) failed: $!");
 	}
 }

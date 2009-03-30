@@ -32,6 +32,33 @@ use strict;
 
 my $mypid = $$;
 
+sub WARN_handler {
+    my($signal) = @_;
+
+	if(defined $main::logger) {
+		$main::logger->warning("WARNING: $signal");
+	}
+	else {
+		printf STDERR "WARNING: $signal\n";
+	}
+}
+
+sub DIE_handler {
+    my($signal) = @_;
+
+	if(defined $main::logger) {
+		$main::logger->warning("ERROR: $signal");
+	}
+	else {
+		printf STDERR "ERROR: $signal\n";
+	}
+
+	exit 1;
+}
+
+$SIG{__WARN__} = 'WARN_handler';
+$SIG{__DIE__}  = 'DIE_handler';
+
 END {
 	if($mypid == $$) {
 		my $m = "terminated (rc=$?)";
@@ -53,6 +80,7 @@ else  {
 
 sub cmd_handler() {
 	my $ev = shift;
+
 	if(my $cmd = $ev->w->fd->getline) {
 		if($cmd =~ /^shutdown (.+)$/) {
 			$main::logger->warning("shutdown request by '" . $ev->w->desc . "'");
