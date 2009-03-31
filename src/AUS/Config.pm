@@ -36,7 +36,22 @@ die "Could not read config file!\n" unless (-r $xml_cfgfile);
 
 my $xml_parser = XML::LibXML->new();
 my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
+
+&parse_settings($xml_dom, '/aus/settings/*');
+die "no secret set, aborting\n" unless(defined($main::config{'secret'}) && $main::config{'secret'} ne '');
+
 &parse_hosts($xml_dom, '/aus/hosts/use');
+
+sub parse_settings() {
+	my ($ctx, $xpath) = @_;
+
+	my $res = $ctx->findnodes($xpath);
+	die "config file: empty XPath node list: $xpath\n" unless ($res->isa('XML::LibXML::NodeList'));
+
+	foreach my $nctx ($res->get_nodelist) {
+		$main::config{$nctx->localname} = $nctx->textContent;
+	}
+}
 
 sub parse_hosts() {
 	my ($ctx, $xpath) = @_;
@@ -50,7 +65,7 @@ sub parse_hosts() {
 		eval("require $pkg;");
 		die($@) if $@;
 
-		eval("push(\@main::nodes, new $pkg(\$nctx));");
+		eval("push(\@main::hosts, new $pkg(\$nctx));");
 		die($@) if $@;
 	}
 }

@@ -28,6 +28,7 @@
 package AUS::Host::Generic;
 
 use XML::LibXML;
+use XML::LibXML::Reader;
 use strict;
 
 sub new {
@@ -53,6 +54,39 @@ sub getXMLhosts {
     my ($self) = @_;
 
     warn(${$self}{_class} . " did not override getXMLhosts method!\n");
+    
+    return '';
+}
+
+sub _doAction {
+    my ($self) = @_;
+
+	my $xml = $self->getXMLhosts();
+	my $reader = XML::LibXML::Reader->new(string => $xml, recover=>1);
+	
+	unless(defined($reader)) {
+		warn "invalid host XML structure: '$xml'\n";
+		return;
+	}
+	
+	while ($reader->read) {
+		printf "%d %d %s %d\n", ($reader->depth,
+			$reader->nodeType,
+			$reader->name,
+			$reader->isEmptyElement);
+	}
+}
+
+sub doShutdown {
+    my ($self) = @_;
+	
+	$self->_doAction();
+}
+
+sub testShutdown {
+    my ($self) = @_;
+
+	$self->_doAction();
 }
 
 1;

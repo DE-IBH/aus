@@ -84,10 +84,28 @@ sub cmd_handler() {
 
 	if(my $cmd = $ev->w->fd->getline) {
 		if($cmd =~ /^shutdown (.+)$/) {
-			$main::logger->warning("shutdown request by '" . $ev->w->desc . "'");
+			if($1 ne $main::config{'secret'}) {
+				$main::logger->warning("shutdown: bad secret by '" . $ev->w->desc . "'");
+			}
+			else {
+				$main::logger->warning("shutdown: request by '" . $ev->w->desc . "'");
+
+				foreach my $hosts (@main::hosts) {
+					$hosts->doShutdown();
+				}
+			}
 		}
 		elsif($cmd =~ /^test (.+)$/) {
-			$main::logger->info("test request by '" . $ev->w->desc . "'");
+			if($1 ne $main::config{'secret'}) {
+				$main::logger->warning("test: bad secret by '" . $ev->w->desc . "'");
+			}
+			else {
+				$main::logger->warning("test: request by '" . $ev->w->desc . "'");
+
+				foreach my $hosts (@main::hosts) {
+					$hosts->testShutdown();
+				}
+			}
 		}
 		else {
 			$main::logger->warning("unknown request '$cmd' by '" . $ev->w->desc . "'");

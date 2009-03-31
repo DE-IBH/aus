@@ -31,13 +31,6 @@ use AUS::Host::Generic;
 use strict;
 our @ISA = qw(AUS::Host::Generic);
 
-if ($^O eq "MSWin32") {
-  require AUS::Host::File::Win32;
-}
-else  {
-  require AUS::Host::File::POSIX;
-}
-
 sub new {
     my ($class, @p) = @_;
     my $self = AUS::Host::Generic->new($class, @p);
@@ -46,6 +39,16 @@ sub new {
     die('Could not read file '.${$self}{'filename'}."!\n") unless (-r ${$self}{'filename'});
 
     return $self;
+}
+
+sub getXMLhosts {
+    my ($self) = @_;
+
+	open(HOSTS, ${$self}{'filename'});
+	my @ret = <HOSTS>;
+	close(HOSTS);
+    
+    return join("\n", @ret);
 }
 
 1;
