@@ -35,7 +35,7 @@ sub new {
     my ($class, $oclass, $ctx) = @_;
 
     my $self = {
-	_class => $class,
+	_class => $oclass,
     };
 
     # Read parameter

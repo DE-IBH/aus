@@ -79,6 +79,8 @@ else  {
   require AUS::POSIX;
 }
 
+&AUS::Config::parse_config(shift);
+
 sub cmd_handler() {
 	my $ev = shift;
 

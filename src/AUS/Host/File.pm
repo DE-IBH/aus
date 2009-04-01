@@ -35,6 +35,9 @@ sub new {
     my ($class, @p) = @_;
     my $self = AUS::Host::Generic->new($class, @p);
 
+	$main::logger->info("host source:");
+	$main::logger->info(" filename = " . ${$self}{'filename'});
+
     die("$class requires filename option!\n") unless (${$self}{'filename'});
     die('Could not read file '.${$self}{'filename'}."!\n") unless (-r ${$self}{'filename'});
 

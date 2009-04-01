@@ -44,19 +44,19 @@ sub new {
 sub info {
     my ($self, $m) = @_;
 	
-	syslog(Sys::Syslog::LOG_INFO, $m)
+	syslog(Sys::Syslog::LOG_INFO, "<" . caller() . "> $m");
 }
 
 sub warning {
     my ($self, $m) = @_;
 	
-	syslog(Sys::Syslog::LOG_WARNING, $m)
+	syslog(Sys::Syslog::LOG_WARNING, "<" . caller() . "> $m");
 }
 
 sub error {
     my ($self, $m) = @_;
 	
-	syslog(Sys::Syslog::LOG_ERR, $m)
+	syslog(Sys::Syslog::LOG_ERR, "<" . caller() . "> $m");
 }
 
 1;

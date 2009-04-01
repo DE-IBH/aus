@@ -31,16 +31,19 @@ use AUS::Client::Generic;
 use AUS::Host::Generic;
 use strict;
 
-my $xml_cfgfile = shift || die "Usage: $0 <config.xml>\n";
-die "Could not read config file!\n" unless (-r $xml_cfgfile);
+sub parse_config() {
+	my ($xml_cfgfile) = @_;
+	die "Usage: $0 <config.xml>\n" unless (defined($xml_cfgfile));
+	die "Could not read config file!\n" unless (-r $xml_cfgfile);
 
-my $xml_parser = XML::LibXML->new();
-my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
+	my $xml_parser = XML::LibXML->new();
+	my $xml_dom = $xml_parser->parse_file($xml_cfgfile);
 
-&parse_settings($xml_dom, '/aus/settings/*');
-die "no secret set, aborting\n" unless(defined($main::config{'secret'}) && $main::config{'secret'} ne '');
+	&parse_settings($xml_dom, '/aus/settings/*');
+	die "no secret set, aborting\n" unless(defined($main::config{'secret'}) && $main::config{'secret'} ne '');
 
-&parse_hosts($xml_dom, '/aus/hosts/use');
+	&parse_hosts($xml_dom, '/aus/hosts/use');	
+}
 
 sub parse_settings() {
 	my ($ctx, $xpath) = @_;
