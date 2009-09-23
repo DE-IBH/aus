@@ -25,9 +25,52 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+=pod
+
+=head1 NAME
+
+AUS::Client::VMwareVI - Perl AUS extension for host shutdowns using the VMwareVI API.
+
+=head1 SYNOPSIS
+
+  use AUS::Client::VMwareVI;
+
+=head1 DESCRIPTION
+
+AUS::Client::VMwareVI provides an L<AUS::Client::Generic> implementation
+using the VMwareVI API.
+
+=head1 METHODS
+
+=over 4
+
+=cut
+
 package AUS::Client::VMwareVI;
 
 use VMware::VIRuntime;
 use AUS::Client::Generic;
 use strict;
+use warnings;
 our @ISA = qw(AUS::Client::Generic);
+
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<AUS::Client::Generic>, L<VMware::VIRuntime>
+L<aus(1)>, L<ausd(1)>
+
+=head1 AUTHOR
+
+Thomas Liske <liske@ibh.de>
+
+=head1 COPYRIGHT
+
+Copyright 2009 by IBH IT-Service GmbH [http://www.ibh.de/]
+
+=cut
+
+1;

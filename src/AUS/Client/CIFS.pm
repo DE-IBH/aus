@@ -25,8 +25,51 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+=pod
+
+=head1 NAME
+
+AUS::Client::CIFS - Perl AUS extension for host shutdowns by CIFS RPC calls.
+
+=head1 SYNOPSIS
+
+  use AUS::Client::CIFS;
+
+=head1 DESCRIPTION
+
+AUS::Client::CIFS provides an L<AUS::Client::Generic> implementation
+using CIFS RPC.
+
+=head1 METHODS
+
+=over 4
+
+=cut
+
 package AUS::Client::CIFS;
 
 use AUS::Client::Generic;
 use strict;
+use warnings;
 our @ISA = qw(AUS::Client::Generic);
+
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<AUS::Client::Generic>, L<net(8)>,
+L<aus(1)>, L<ausd(1)>
+
+=head1 AUTHOR
+
+Thomas Liske <liske@ibh.de>
+
+=head1 COPYRIGHT
+
+Copyright 2009 by IBH IT-Service GmbH [http://www.ibh.de/]
+
+=cut
+
+1;

@@ -25,9 +25,52 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+=pod
+
+=head1 NAME
+
+AUS::Client::iLO - Perl AUS extension for host shutdowns using HP Integrated Lights-Out API.
+
+=head1 SYNOPSIS
+
+  use AUS::Client::iLO;
+
+=head1 DESCRIPTION
+
+AUS::Client::iLO provides an L<AUS::Client::Generic> implementation
+using HP Integrated Lights-Out API (HTTP).
+
+=head1 METHODS
+
+=over 4
+
+=cut
+
 package AUS::Client::iLO;
 
 use AUS::Client::Generic;
 use WWW::Curl::Easy;
 use strict;
+use warnings;
 our @ISA = qw(AUS::Client::Generic);
+
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<AUS::Client::Generic>, L<WWW::Curl::Easy>,
+L<aus(1)>, L<ausd(1)>
+
+=head1 AUTHOR
+
+Thomas Liske <liske@ibh.de>
+
+=head1 COPYRIGHT
+
+Copyright 2009 by IBH IT-Service GmbH [http://www.ibh.de/]
+
+=cut
+
+1;
