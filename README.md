@@ -1,4 +1,0 @@
-aus
-===
-
-Agentless Universal Shutdown
