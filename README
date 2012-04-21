@@ -1,22 +1,27 @@
 Agentless Universal Shutdown
 ============================
 
-Installation GNU/Linux
-----------------------
+About
+-----
 
-Required packages:
+Agentless Universal Shutdown is a Perl based, multiplatform network
+shutdown framework. It provides shutdown plugins for SSH, Windows RPC,
+HP iLO, VMware ESX and XenServer (including virtual machines) w/o
+requiring any software installed on the servers.
+
+
+Dependencies
+------------
+
+Required:
  - Event
  - XML::LibXML
  - Proc::Daemon
  - Sys::Syslog
  - Linux::Inotify2
- 
+
 Optional:
  - VMware::VIRuntime (VMware 3.5)
  - RPC::XML          (Xen 5.0)
  - RPC::XML::Client  (Xen 5.0)
  - WWW::Curl::Easy   (iLO)
-
-
-Installation MS Win
--------------------
